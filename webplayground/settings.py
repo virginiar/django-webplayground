@@ -130,6 +130,15 @@ MAILERS = {
     },
 }
 
+""" MAILERS = {
+    'default': {
+        'BACKEND': 'django.core.mail.backends.filebased.EmailBackend',
+        'OPTIONS': {
+            'file_path': BASE_DIR / 'sent_emails'
+        }
+    },
+} """
+
 
 # Auth redirects
 LOGIN_REDIRECT_URL = 'pages:pages'
