@@ -35,14 +35,17 @@
               {% if not request.user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'login' %}">Acceder</a>
-              </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Registro</a>
+                </li>
               {% else %}
                 <li class="nav-item">
                   <form id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit">Salir</button>
                   </form>
-              </li>
+                </li>
               {% endif %}
             </ul>
           </div>
