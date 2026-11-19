@@ -8,6 +8,13 @@ class UserCreationFormWithEmail(UserCreationForm):
         help_text='Requerido, 254 caractéres como máximo y debe ser válido.'
         )
 
+
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("El email ya está registrado, prueba con otro.")
+        return email
