@@ -1,9 +1,14 @@
 from django import forms
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
+from django.views.generic.base import TemplateView
 from .forms import UserCreationFormWithEmail
 
 # Create your views here.
+
+
 class SignUpView(CreateView):
     form_class = UserCreationFormWithEmail
     template_name = 'registration/signup.html'
@@ -19,9 +24,9 @@ class SignUpView(CreateView):
             'placeholder': 'Nombre de usuario'
         })
         form.fields['email'].widget = forms.EmailInput(attrs={
-                    'class': 'form-control mb-2',
-                    'placeholder': 'Correo electrónico'
-                })
+            'class': 'form-control mb-2',
+            'placeholder': 'Correo electrónico'
+        })
         form.fields['password1'].widget = forms.PasswordInput(attrs={
             'class': 'form-control mb-2',
             'placeholder': 'Contraseña'
@@ -31,3 +36,8 @@ class SignUpView(CreateView):
             'placeholder': 'Repite la contraseña'
         })
         return form
+
+
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdateView(TemplateView):
+    template_name = 'registration/profile_form.html'
