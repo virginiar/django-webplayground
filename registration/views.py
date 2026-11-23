@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
-from .forms import UserCreationFormWithEmail, ProfileForm
+from .forms import EmailForm, ProfileForm, UserCreationFormWithEmail
 from .models import Profile
 
 
@@ -48,3 +48,23 @@ class ProfileUpdateView(UpdateView):
         # Recuperar el objeto que se va a editar
         profile, created =  Profile.objects.get_or_create(user=self.request.user)
         return profile
+
+
+@method_decorator(login_required, name='dispatch')
+class EmailUpdateView(UpdateView):
+    form_class = EmailForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_email_form.html'
+
+    def get_object(self):
+        # Recuperar el objeto que se va a editar
+        return self.request.user
+
+    def get_form(self, form_class = None):
+        form = super(EmailUpdateView, self).get_form()
+        # Modificar en tiempo real
+        form.fields['email'].widget = forms.EmailInput(attrs={
+                'class': 'form-control mb-2',
+                'placeholder': 'Correo electrónico'
+            })
+        return form
