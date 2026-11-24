@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'core',
     'pages.apps.PagesConfig',
+    'profiles',
 ]
 
 MIDDLEWARE = [
