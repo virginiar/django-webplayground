@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -21,3 +21,8 @@ class ThreadDetailView(DetailView):
             raise Http404()
         return obj
 
+
+def add_message(request, pk):
+    print(request.GET)
+    json_response = {'created': False}
+    return JsonResponse(json_response)
