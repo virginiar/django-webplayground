@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
-from .models import Thread
+from .models import Message, Thread
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -23,6 +24,14 @@ class ThreadDetailView(DetailView):
 
 
 def add_message(request, pk):
-    print(request.GET)
     json_response = {'created': False}
+    if request.user.is_authenticated:
+        content = request.GET.get('content')
+        if content:
+            thread = get_object_or_404(Thread, pk=pk)
+            message = Message.objects.create(user=request.user, content=content)
+            thread.messages.add(message)
+            json_response['created'] = True
+    else:
+        raise Http404("El usuario no está identificado.")
     return JsonResponse(json_response)
